@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  selector:
+    matchLabels:
+      app: vtp-app
+      tier: backend
+      track: stable
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: vtp-app
+        tier: backend
+        track: stable
+    spec:
+      containers:
+        - name: typescript
+          image: toykichev/backend
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8081
+          env:
+            - name: BACKEND_URI
+              value: backend
+            - name: FRONTEND_URI
+              value: frontend
+            - name: PGUSER
+              value: postgres
+            - name: PGPASSWORD
+              value: postgres
+            - name: PGDATABASE
+              value: postgres
+            - name: PGHOST
+              value: pg-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  selector:
+    app: vtp-app
+    tier: backend
+  ports:
+    - port: 8081
+  type: LoadBalancer

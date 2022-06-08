@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  selector:
+    matchLabels:
+      app: vtp-app
+      tier: frontend
+      track: stable
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: vtp-app
+        tier: frontend
+        track: stable
+    spec:
+      containers:
+        - name: vue
+          image: toykichev/frontend
+          imagePullPolicy: IfNotPresent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector:
+    app: vtp-app
+    tier: frontend
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: LoadBalancer
