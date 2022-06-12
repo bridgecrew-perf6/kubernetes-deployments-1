@@ -9,7 +9,7 @@ data:
       email character varying COLLATE "default" NOT NULL,
       username character varying COLLATE "default" NOT NULL,
       discriminator bigint NOT NULL,
-      avatar character varying COLLATE "default" NOT NULL
+      avatar character varying COLLATE "default" NOT NULL,
       key character varying COLLATE "default",
       refresh_token character varying COLLATE "default" NOT NULL,
     );
@@ -19,16 +19,16 @@ kind: Deployment
 metadata:
   name: postgres
   labels:
-    app: database
+    app: postgres
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: database
+      app: postgres
   template:
     metadata:
       labels:
-        app: database
+        app: postgres
     spec:
       containers:
         - name: postgres
@@ -58,10 +58,10 @@ kind: Service
 metadata:
   name: pg-service
   labels:
-    app: database
+    app: postgres
 spec:
   type: ClusterIP
   selector:
-    app: database
+    app: postgres
   ports:
     - port: 5432
