@@ -18,6 +18,8 @@ spec:
         - matchExpressions:
             - key: kubrnetes.io/hostname
               operator: In
+              values:
+                - kube-master
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
