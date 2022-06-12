@@ -3,16 +3,20 @@ kind: Deployment
 metadata:
   name: postgres
   labels:
-    app: postgres
+    app: vtp-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app: vtp-app
+      tier: database
+      track: stable
   template:
     metadata:
       labels:
-        app: postgres
+        app: vtp-app
+        tier: database
+        track: stable
     spec:
       containers:
         - name: postgres
@@ -42,10 +46,10 @@ kind: Service
 metadata:
   name: pg-service
   labels:
-    app: postgres
+    app: vtp-app
 spec:
   type: ClusterIP
   selector:
-    app: postgres
+    app: vtp-app
   ports:
     - port: 5432
