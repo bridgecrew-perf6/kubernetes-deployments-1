@@ -14,34 +14,6 @@ data:
 metadata:
   name: pg-init-script
 ---
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: postgres-pv
-  labels:
-    app: database
-spec:
-  storageClassName: manual
-  capacity:
-    storage: 1Gi
-  accessModes:
-    - ReadWriteMany
-  hostPath:
-    path: "/mnt/vagrant-kubernetes/data"
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: postgres-pv-claim
-spec:
-  storageClassName: manual
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 1Gi
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -79,7 +51,7 @@ spec:
             name: pg-init-script
         - name: postgres-pv-claim
           persistentVolumeClaim:
-            claimName: postgres-pv-claim
+            claimName: pvc-postgres
 ---
 apiVersion: v1
 kind: Service
