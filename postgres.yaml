@@ -19,16 +19,14 @@ kind: PersistentVolume
 metadata:
   name: postgres-pv
   labels:
-    app: postgres
-    ver: itwl-dev-01-pv
+    app: database
 spec:
+  storageClassName: manual
   capacity:
     storage: 1Gi
   accessModes:
     - ReadWriteMany
-  persistentVolumeReclaimPolicy: Retain
-  nfs:
-    server: 192.168.50.1
+  hostPath:
     path: "/mnt/vagrant-kubernetes/data"
 
 ---
@@ -37,10 +35,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: postgres-pv-claim
 spec:
-  selector:
-    matchLabels:
-      app: postgres
-      ver: itwl-dev-01-pv
+  storageClassName: manual
   accessModes:
     - ReadWriteMany
   resources:
