@@ -1,5 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
+metadata:
+  name: pg-init-script
 data:
   CreateDB.sql: |- 
     CREATE TABLE IF NOT EXISTS users (
@@ -11,8 +13,6 @@ data:
       key character varying COLLATE "default",
       refresh_token character varying COLLATE "default" NOT NULL,
     );
-metadata:
-  name: pg-init-script
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -38,7 +38,7 @@ spec:
           volumeMounts:
             - name: sqlscript
               mountPath: /docker-entrypoint-initdb.d
-            - name: postgres-pv-claim
+            - name: pvc-postgres
               mountPath: /var/lib/postgresql/data
           env:
             - name: POSTGRES_USER
@@ -49,7 +49,7 @@ spec:
         - name: sqlscript
           configMap:
             name: pg-init-script
-        - name: postgres-pv-claim
+        - name: pvc-postgres
           persistentVolumeClaim:
             claimName: pvc-postgres
 ---
