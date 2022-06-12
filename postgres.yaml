@@ -7,11 +7,9 @@ data:
       email character varying COLLATE "default" NOT NULL,
       username character varying COLLATE "default" NOT NULL,
       discriminator bigint NOT NULL,
-      role character varying COLLATE "default" NOT NULL DEFAULT USER,
-      "isActivated" boolean NOT NULL DEFAULT false,
+      avatar character varying COLLATE "default" NOT NULL
       key character varying COLLATE "default",
       refresh_token character varying COLLATE "default" NOT NULL,
-      avatar character varying COLLATE "default" NOT NULL
     );
 metadata:
   name: pg-init-script
@@ -40,6 +38,8 @@ spec:
           volumeMounts:
             - name: sqlscript
               mountPath: /docker-entrypoint-initdb.d
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
           env:
             - name: POSTGRES_USER
               value: "postgres"
@@ -49,6 +49,10 @@ spec:
         - name: sqlscript
           configMap:
             name: pg-init-script
+        - name: postgres-storage
+          gcePersistentDisk:
+            fsType: ext4
+            pdName: postgres-disk
 ---
 apiVersion: v1
 kind: Service
