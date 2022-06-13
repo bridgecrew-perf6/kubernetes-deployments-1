@@ -24,22 +24,17 @@ spec:
           ports:
             - containerPort: 5432
           volumeMounts:
-            - name: sqlscript
-              mountPath: "/docker-entrypoint-initdb.d"
-            - name: postgres-pvc
-              mountPath: "/var/lib/postgresql"
+            - mountPath: /var/lib/postgresql/data
+              name: postgresdb
           env:
             - name: POSTGRES_USER
               value: "postgres"
             - name: POSTGRES_PASSWORD
               value: "postgres"
       volumes:
-        - name: sqlscript
-          configMap:
-            name: pg-init-script
-        - name: postgres-pvc
+        - name: postgresdb
           persistentVolumeClaim:
-            claimName: postgres-pvc
+            claimName: postgres-storage-claim
 ---
 apiVersion: v1
 kind: Service
